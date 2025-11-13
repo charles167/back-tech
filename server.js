@@ -15,6 +15,12 @@ app.use(express.json({ limit: '10mb' })); // For handling large payloads if need
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+
+// 👇 Root route
+app.get("/", (req, res) => {
+  res.send("Backend API is running successfully 🚀");
+});
+
 // Nodemailer transporter
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
