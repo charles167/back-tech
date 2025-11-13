@@ -11,11 +11,27 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // CORS setup
+const allowedOrigins = [
+  'http://localhost:8080',
+  'https://t1-ivory.vercel.app'
+];
+
 const corsOptions = {
-  origin: 'http://localhost:8080', // frontend URL
+  origin: function(origin, callback) {
+    // allow requests with no origin (like Postman) or if origin is in the whitelist
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type']
 };
+
+app.use(cors(corsOptions));
+app.options('/send-email', cors(corsOptions));
+
 app.use(cors(corsOptions));
 app.options('/send-email', cors(corsOptions)); // handle preflight
 
